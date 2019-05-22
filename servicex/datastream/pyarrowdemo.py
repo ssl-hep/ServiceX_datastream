@@ -29,8 +29,10 @@ import os
 
 import awkward
 import pyarrow as pa
+import sys
 import uproot
 
+print(sys.path)
 file = uproot.open(os.path.join("/Users","bengal1","dev","IRIS-HEP","data",
                                 "DYJetsToLL_M-50_HT-100to200_TuneCUETP8M1_13TeV-madgraphMLM-pythia8.root"))
 events = file["Events"]
@@ -44,7 +46,6 @@ arrays = events.arrays(["nElectron",
                    "Electron_pfRelIso03_all"], entrystop=1000)
 
 physics_objects = {}
-print(arrays[b'Electron_pt'].__class__.__name__)
 offsets = awkward.JaggedArray.counts2offsets(arrays[b'nElectron'])
 
 physics_objects["Electron"] = {
@@ -61,18 +62,21 @@ physics_objects["Electron"] = {
 
 electrons = physics_objects["Electron"]
 t = awkward.Table(electrons)
+awkward.toparquet("tmp.parquet", t)
+
 pa_table = awkward.toarrow(t)
 
+
 batches = pa_table.to_batches()
-for batch in batches:
-    sink = pa.BufferOutputStream()
-    writer = pa.RecordBatchStreamWriter(sink, batch.schema)
-    writer.write_batch(batch)
+batch = batches[0]
+sink = pa.BufferOutputStream()
+writer = pa.RecordBatchStreamWriter(sink, batch.schema)
+writer.write_batch(batch)
 
-    writer.close()
-    buf = sink.getvalue()
+writer.close()
+buf = sink.getvalue()
 
-    reader = pa.ipc.open_stream(buf)
-    batches = [b for b in reader]
-    arrays = awkward.fromarrow(batches[0])
-    print(arrays)
+reader = pa.ipc.open_stream(buf)
+batches2 = [b for b in reader]
+arrays = awkward.fromarrow(batches2[0])
+print(arrays)
