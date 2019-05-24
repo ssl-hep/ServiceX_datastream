@@ -1,0 +1,7 @@
+## External access.
+##
+external:
+  enabled: false
+
+persistence:
+  enabled: true
