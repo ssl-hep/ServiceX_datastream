@@ -1,8 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: testclient
-  namespace: kafka
+  name: kafkacat
 spec:
   containers:
   - name: kafka

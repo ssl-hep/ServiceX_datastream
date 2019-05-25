@@ -51,6 +51,27 @@ custom values created here:
 % helm install --name servicex-kafka -f values.yaml --namespace kafka incubator/kafka
 ```
 
+## Create a Topic from Command Line
+Ordinarily the transformer or API gateway will create the Kafka topic
+based on the dataset token. For testing you may want to create one 
+manually. We'll install a little pod with the Java command line tools and
+run the command.
+
+```bash
+% kubectl create -n kafka -f kube/testclient.yaml
+```
+
+You can run commands with:
+```bash
+% kubectl -n kafka exec -it testclient bash
+```
+
+Create a serviceX topic with 100 partitions and replication factor of one as:
+```bash
+% kubectl -n kafka exec testclient -- /opt/kafka/bin/kafka-topics.sh --zookeeper servicex-kafka-zookeeper --topic servicex --create --partitions 100 --replication-factor 1
+```
+
+
 ## Install an Internal Toolkit for Working with Kafka
 We have a simple pod that can be deployed into the cluster that has the useful
 [kafkacat](https://github.com/edenhill/kafkacat/blob/master/README.md)
@@ -62,16 +83,17 @@ command line tool.
 
 You can run commands with:
 ```bash
-% kubectl -n kafka exec -it testclient bash
+% kubectl -n kafka exec -it kafkacat bash
 ```
 
 You can list topics with a command inside this pod like:
 ```bash
-% kafkacat -b kafka-broker:9092 -L
+% kafkacat -b servicex-kafka -L
 ```
 
+You can use kafkacat in consumer mode to see messages being written to the
+topic with:
+```bash
+% kafkacat -b servicex-kafka -t servicex -C
+```
 
-
-
-Use this for now:
-https://dojoblog.dellemc.com/dojo/deploy-kafka-cluster-kubernetes/
