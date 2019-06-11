@@ -1,0 +1,16 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: busybox
+spec:
+  volumes:
+    - name: servicex-storage
+      persistentVolumeClaim:
+       claimName: servicex-pvc
+  containers:
+    - name: task-pv-container
+      image: busybox
+      command: ['sleep', '3600']
+      volumeMounts:
+        - mountPath: "/servicex"
+          name: servicex-storage
