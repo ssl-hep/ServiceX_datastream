@@ -1,7 +1,14 @@
 ## External access.
 ##
 external:
-  enabled: false
+  enabled: true
+  domain: slateci.net
+  type: LoadBalancer
+  distinct: true
+
+configurationOverrides:
+   "advertised.listeners": EXTERNAL://servicex-kafka-$((${KAFKA_BROKER_ID})).slateci.net:19092
+   "listener.security.protocol.map": PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
 
 persistence:
   enabled: true
