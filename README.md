@@ -29,6 +29,8 @@ You will also want to set up DNS to the IPs that get assigned to the <RELEASE PR
 The number in the service name will match up to the ${KAFKA_BROKER_ID} on line 46. Set up your DNS names for individual external IPs following the pattern on line 46. Without any changes from the version here: kafka#.domain
 For ease of access you may want to set up a DNS round robin as well. kafka.domain will allow you to specify kafka.domain:19092 as your broker from kafka command line, rather than specifying a specific external service. Unfortunately if an external service fails you will still need to modify your list of advertised listeners, or else kafka won't find a broker and will error out.
 
+Also note that by default Kafka has no authentication set up. This means that anyone with your broker names can read and write to/from the Kafka instance. This will be addressed here at a later time.
+
 ## Create a namespace
 We will put all of our applicaton pods in the `servicex` namespace.
 
