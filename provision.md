@@ -104,6 +104,20 @@ Create a serviceX topic with 100 partitions and replication factor of one as:
     --config compression.type=lz4
 ```
 
+See how many messages are in a topic
+```bash
+% /kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list servicex-kafka-0.slateci.net:19092 --topic servicex
+```
+
+See where the consumer offset is currently for each topic:
+```bash
+% ./kafka-consumer-groups.sh --bootstrap-server servicex-kafka-0.slateci.net:19092 --group hist --describe
+```
+
+Reset consumer group
+```bash
+% ./kafka-consumer-groups.sh --bootstrap-server servicex-kafka-0.slateci.net:19092 --group hist --topic hists --reset-offsets --to-earliest --execute
+```
 ## Deploying the Management Console
 We use the Yahoo Kafka Manager to explore what is going on inside the kafka
 cluster.

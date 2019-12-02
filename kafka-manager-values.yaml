@@ -16,7 +16,7 @@ clusters:
 basicAuth:
   enabled: true
   username: "admin"
-  password: "servicex"
+  password: "xxxxxxx"
 
 service:
   type: LoadBalancer
@@ -30,7 +30,7 @@ ingress:
     # kubernetes.io/tls-acme: "true"
   path: /
   hosts:
-    - kafka-manager.slateci.org
+    - kafka-manager.mydomain.net
   tls: []
     # - secretName: kafka-manager-tls
     #   hosts:
