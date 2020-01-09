@@ -10,13 +10,15 @@ The Datastream Service runs inside a Kubernetes cluster.
 $ helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
 $ kubectl create ns kafka
 $ helm install --name my-kafka --namespace kafka incubator/kafka
+$ helm install --name my-kafka --namespace kafka stable/kafka-manager
 ```
 ### When tiller is not available
 This may happen if you do not have full access to the Kubernetes cluster, these can be run locally, with access to start Kubernetes services and pods. You should have the values.yaml from this repository to alter the default values to ones better suited to running Kafka for servicex.
 ```bash
 $ helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
-$ helm fetch —untar —untardir <LOCATION OF CHARTS> incubator/kafka
-$ cp values.yaml <LOCATION OF CHARTS>
+$ helm fetch --untar --untardir <LOCATION OF CHARTS> incubator/kafka
+$ helm fetch --untar --untardir <LOCATION OF CHARTS> stable/kafka-manager
+$ cp values.yaml <LOCATION OF CHARTS>/kafka
 $ helm template --name <RELEASE PREFIX> --output-dir <LOCATION FOR MANIFEST> <LOCATION OF CHARTS>
 $ kubectl -n <KUBERNETES NAMESPACE> apply --recursive -f <LOCATION FOR MANIFEST>
 ```
